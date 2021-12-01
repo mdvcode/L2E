@@ -1,0 +1,5 @@
+form {
+    display: grid;
+    max-width: 300px;
+    line-height: 32px;
+}

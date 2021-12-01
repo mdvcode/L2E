@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %} Adding new post {% endblock %}
+
+{% block content %}
+<form action="{% url 'blog:add_post' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Створити">
+</form>
+{% endblock %}

@@ -1,0 +1,24 @@
+networks:
+  local-blog-network:
+    driver: bridge
+    name: django-docker-network
+
+services:
+  postgres:
+    image: postgres:13
+    networks:
+      - local-blog-network
+    ports:
+      - 5432:5432
+    env_file:
+      - ./conf/postgres.env
+  db:
+    image: dariri/hello-world:latest
+    networks:
+      - local-blog-network
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+    env_file:
+      - ./conf/postgres.env

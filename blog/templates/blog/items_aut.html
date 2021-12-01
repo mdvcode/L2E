@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+</head>
+<body>
+{% for posts in post %}
+    <a href="{% url 'blog:text' language=posts.language %}">{{ posts.title }}</a>
+    <a href="{% url 'blog:lang' language=posts.language %}">{{ posts.language }}</a>
+    <a href="{% url 'blog:items_aut' author=posts.author%}">{{ posts.author }}</a>
+    <h3>{{ posts.datetime }}</h3>
+    <a href="{% url 'blog:home' %}"> <- Back</a>
+<img src="images/download.jpg"  alt=" "/>
+{% endfor %}
+</body>
+</html>

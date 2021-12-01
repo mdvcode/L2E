@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for posts in post %}
+    <a href="{% url 'blog:text' id=posts.id %}">{{ posts.title }}</a>
+    <a href="{% url 'blog:lang' language=posts.language %}">{{ posts.language }}</a>
+    <a href="{% url 'blog:items_aut' author=posts.author %}">{{ posts.author }}</a>
+    <h3>{{ posts.datetime }}</h3>
+<img src="images/download.jpg"  alt=" "/>
+{% endfor %}
+{% endblock %}
+
+

@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/style.css' %}">
+    <title>Base</title>
+</head>
+<body>
+<form>
+    <label>
+        <input type="text" placeholder="Искать здесь...">
+    </label>
+    <button type="submit"></button>
+</form>
+{% if user.is_authenticated %}
+<h1>Hello, {{ user }}!</h1>>
+<a href="{% url 'users:logout' %}">Logout</a>
+<a href="{% url 'blog:items_aut' author=posts.author %}">Posts</a>
+<a href="{% url 'blog:add_post' %}">New post</a>
+{% else %}
+<a href="{% url 'users:signup' %}">Sign Up</a>
+<a href="{% url 'users:login' %}">Log in</a>
+{% endif %}
+<hr/>
+{% block content %}
+{% endblock %}
+</body>
+</html>

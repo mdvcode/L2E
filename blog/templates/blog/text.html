@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text</title>
+</head>
+<body>
+<a href="{% url 'blog:home' %}"> <- Back</a>
+<a href="{% url 'blog:text' id=posts.id %}">{{ posts.title }}</a>
+<a href="{% url 'blog:lang' language=posts.language %}">{{ posts.language }}</a>
+<h3>{{ posts.image }}</h3>
+<h3>{{ posts.content }}</h3>
+<h3>{{ posts.link }}</h3>
+<a href="{% url 'blog:items_aut' author=posts.author %}">{{ posts.author }}</a>
+<h3>{{ posts.datetime }}</h3>
+<img src="images/download.jpg"  alt=" "/>
+</body>
+</html>
