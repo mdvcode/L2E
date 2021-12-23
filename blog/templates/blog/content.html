@@ -1,12 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% for posts in post %}
-    <a href="{% url 'blog:text' id=posts.id %}">{{ posts.title }}</a>
-    <a href="{% url 'blog:lang' language=posts.language %}">{{ posts.language }}</a>
-    <a href="{% url 'blog:items_aut' author=posts.author %}">{{ posts.author }}</a>
-    <h3>{{ posts.datetime }}</h3>
-<img src="images/download.jpg"  alt=" "/>
+
+<!--<div id="carousel" class="carousel slide" data-ride="carousel">-->
+<!--  <ol class="carousel-indicators">-->
+<!--    <li data-target="#carousel" data-slide-to="0" class="active"></li>-->
+<!--    <li data-target="#carousel" data-slide-to="1"></li>-->
+<!--    <li data-target="#carousel" data-slide-to="2"></li>-->
+<!--  </ol>-->
+<!--  <div class="carousel-inner">-->
+<!--    <div class="carousel-item active">-->
+<!--      <img class="img-fluid" src="{{ domain }}/static/image/download.jpg/" alt="...">-->
+<!--    </div>-->
+<!--    <div class="carousel-item">-->
+<!--      <img class="img-fluid" src="{{ domain }}/static/image/download.jpg/" alt="...">-->
+<!--    </div>-->
+<!--    <div class="carousel-item">-->
+<!--        <img class="img-fluid" src="{{ domain }}/static/image/download.jpg/" alt="...">-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  &lt;!&ndash; Элементы управления &ndash;&gt;-->
+<!--  <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">-->
+<!--    <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+<!--    <span class="sr-only">Предыдущий</span>-->
+<!--  </a>-->
+<!--  <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">-->
+<!--    <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+<!--    <span class="sr-only">Следующий</span>-->
+<!--  </a>-->
+<!--</div>-->
+<div w3-include-html="slider.html"></div>
+<!--<img src="{{ domain }}/static/image/download.jpg/" alt="">-->
+{% for post in posts %}
+<hr>
+    <a href="{% url 'blog:text' id=post.id %}">{{ post.title }}</a>
+    <a href="{% url 'blog:lang' language=post.language %}">{{ post.language }}</a>
+    <a href="{% url 'blog:items_aut' author=post.author %}">{{ post.author }}</a>
+    <h3>{{ post.datetime }}</h3>
+    <img src="{{ domain }}/media/{{ post.image }}/"  alt=" " width="400"/>
+<hr>
 {% endfor %}
 {% endblock %}
 

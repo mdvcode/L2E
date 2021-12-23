@@ -1,14 +1,27 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <link rel="stylesheet" href="{% static 'css/sign_in.css' %}">
     <meta charset="UTF-8">
     <title>Login</title>
 </head>
 <body>
-<form action="{% url 'users:login' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Зайти">
-</form>
+<!--<form action="{% url 'users:login' %}" method="POST">-->
+<!--    {% csrf_token %}-->
+<!--    {{ form }}-->
+<!--    <input type="submit" value="Зайти">-->
+<!--</form>-->
+
+<div class="container">
+        <div class="row">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <button class="btn btn-custom-2">Вход</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
