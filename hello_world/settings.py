@@ -28,6 +28,18 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+CORS_ORIGIN_ALLOW_ALL = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 2
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
 INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.admin',
@@ -38,6 +50,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'users',
+    'widget_tweaks',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
+    'djoser',
+
 
 ]
 
@@ -136,3 +154,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID = 1
+
+CSS_URL = os.path.join(STATIC_URL, 'css/')
+IMG_URL = os.path.join(STATIC_URL, 'img/')
+LIB_URL = os.path.join(STATIC_URL, 'lib/')
+JS_URL = os.path.join(STATIC_URL, 'js/')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "mard9378@gmail.com"
+EMAIL_HOST_PASSWORD = "aerfr344gfdsdsds"

@@ -7,25 +7,160 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title>Base</title>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+
+	<link href="{{ CSS_URL }}/static/css/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/static/css/styles/bootstrap4/bootstrap.min.css">
+    <link href="{{ CSS_URL }}/static/css/styles/main_styles.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ CSS_URL }}/static/css/responsive.css">
+
+	<script src="{{ JS_URL }}/static/js/jquery-3.2.1.min.js"></script>
+    <script src="{{ JS_URL }}/static/js/popper.js"></script>
+    <script src="{{ JS_URL }}/static/js/bootstrap.min.js"></script>
+    <script src="{{ JS_URL }}/static/js/owl.carousel.js"></script>
+    <script src="{{ JS_URL }}/static/js/easing.js"></script>
+    <script src="{{ JS_URL }}/static/js/custom.js"></script>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
 </head>
 <body>
-<form>
-    <label>
-        <input type="text" placeholder="Искать здесь...">
-    </label>
-    <button type="submit"> 'Искать' </button>
-</form>
-{% if user.is_authenticated %}
-<h1>Hello!</h1>>
-<a href="{% url 'users:logout' %}">Logout</a>
-<a href="{% url 'blog:home' %}">Posts</a>
-<a href="{% url 'blog:add_post' %}">New post</a>
-{% else %}
-<a href="{% url 'users:signup' %}">Sign Up</a>
-<a href="{% url 'users:login' %}">Log in</a>
-{% endif %}
+<header class="header" style="margin-bottom: 20px">
+
+	<!-- Top Bar -->
+	<div class="top_bar">
+		<div class="top_bar_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="top_bar_content d-flex flex-row align-items-center justify-content-start">
+							<div class="top_bar_phone"><span class="top_bar_title">phone:</span>{{index.phone}}</div>
+							<div class="top_bar_right ml-auto">
+
+								<!-- Language -->
+								<div class="top_bar_lang">
+									<span class="top_bar_title">Languages:</span>
+									<ul class="lang_list">
+										<li class="hassubs">
+											<a href="#">Select Language<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+											<ul>
+												{% for language in languages %}
+												<li><a href="{% url 'blog:lang' language_id=language.id %}">{{language.name}}</a></li>
+												{% endfor %}
+
+											</ul>
+										</li>
+									</ul>
+								</div>
+
+								<!-- Social -->
+								<div class="top_bar_social">
+									<span class="top_bar_title social_title">follow us</span>
+									<ul>
+										<li><a href="{{index.facebook}}" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+										<li><a href="{{index.instagram}}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+										<li>{{kurs.buy}}/{{kurs.sale}}</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Header Content -->
+	<div class="header_container">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="header_content d-flex flex-row align-items-center justify-content-start">
+						<div class="logo_container mr-auto">
+							<a href="#">
+								<div class="logo_text">Easy language learning!</div>
+							</a>
+						</div>
+						<nav class="main_nav_contaner" >
+							<ul class="main_nav">
+
+								<li class="active"><a href="{% url 'blog:home' %}">Home</a></li>
+								{% if user.is_authenticated %}
+								<li><a href="{% url 'blog:items_aut' author_id=user.id %}">My Posts</a></li>
+								<li><a href="{% url 'blog:add_post' %}">Create Post</a></li>
+								<li><a href="{% url 'blog:add_lang' %}">Create Language</a></li>
+								<li><a href="{% url 'users:logout' %}">Logout</a></li>
+
+								{% else %}
+								<li><a href="{% url 'users:login' %}">Login</a></li>
+								<li><a href="{% url 'users:signup' %}">Signup</a></li>
+								{% endif %}
+
+							</ul>
+						</nav>
+						<div class="header_content_right ml-auto text-right">
+
+							<!-- Hamburger -->
+
+							<div class="user"><a href="{% url 'users:profile' %}"><i class="fa fa-user" aria-hidden="true"></i></a></div>
+							<div class="hamburger menu_mm">
+								<i class="fa fa-bars menu_mm" aria-hidden="true"></i>
+
+							</div>
+						</div>
+	<div class="menu d-flex flex-column align-items-end justify-content-start text-right menu_mm trans_400">
+		<div class="menu_close_container"><div class="menu_close"><div></div><div></div></div></div>
+
+		<nav class="menu_nav">
+			<ul class="menu_mm">
+				<li class="active"><a href="{% url 'blog:home' %}">Home</a></li>
+								{% if user.is_authenticated %}
+								<li><a href="{% url 'blog:items_aut' author_id=user.id %}">My Posts</a></li>
+								<li><a href="{% url 'blog:add_post' %}">Create Post</a></li>
+								<li><a href="{% url 'blog:add_lang' %}">Create Language</a></li>
+								<li><a href="{% url 'users:logout' %}">Logout</a></li>
+
+								{% else %}
+								<li><a href="{% url 'users:login' %}">Login</a></li>
+								<li><a href="{% url 'users:signup' %}">Signup</a></li>
+								{% endif %}
+
+			</ul>
+		</nav>
+		<div class="menu_extra">
+			<div class="menu_phone"><span class="menu_title">phone:</span>+44 300 303 0266</div>
+			<div class="menu_social">
+				<span class="menu_title">follow us</span>
+				<ul>
+					<li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+					<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+					<li><a href="#">123{{ kurs.sale }}</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</header>
+
 <hr/>
-{% block content %}
+<div style="padding-top: 50px">{% block content %}</div>
+
+
+
 {% endblock %}
+
 </body>
 </html>

@@ -1,50 +1,108 @@
+import requests
 from django.contrib.auth.decorators import login_required
-from django.contrib.postgres.search import SearchVector
+from django.contrib.auth.models import User
+from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.sites.models import Site
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import render, redirect
+from django.http import Http404
+from django.shortcuts import render, redirect, get_object_or_404
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import Posts
-from .forms import PostsForm, LanguageForm, SearchForm
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-
-def search(request):
-    form = SearchForm()
-    query = None
-    results = []
-    if 'query' in request.GET:
-        form = SearchForm(request.GET)
-        if form.is_valid():
-            query = form.cleaned_data['query']
-            results = Posts.objects.annotate(search=SearchVector('title', 'language', 'author').filter(search=query))
-    return render(request, 'blog/search.html', context={'form': form, 'query': query, 'results': results})
+from .models import Posts, Language, IndexInfo, Kurs
+from .forms import PostsForm, LanguageForm, SearchForm, UpdatePostsForm, FilterPostForm
+from .pagination import PostsPagination
+from .serializers import PostsSerializer, LanguagesSerializer, PostCreateSerializer
 
 
 def home(request):
+    index = IndexInfo.objects.all()[0]
     current_site = Site.objects.get_current()
+    authors = User.objects.all()
     posts = Posts.objects.all()
-    return render(request, 'blog/content.html', context={'posts': posts, 'domain': current_site.domain})
+    paginator = Paginator(posts, 10)
+    page_num = request.GET.get('page')
+    kurs = Kurs.objects.all().order_by('-id')[0]
+    try:
+        posts = paginator.page(page_num)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    languages = Language.objects.all()
+    form_filter = FilterPostForm()
+    if request.POST:
+        form_filter = FilterPostForm(request.POST)
+        filter_language = int(form_filter.data.get('language_id'))
+        filter_author = form_filter.data.get('author_id')
+        author = request.POST['author_id']
+        print(author)
+        print(filter_author)
+        print(form_filter.data)
+        print(request.POST)
+        if filter_language != 0 and filter_author != 0:
+            posts = Posts.objects.filter(language_id=filter_language, author_id=filter_author)
+        elif filter_author == 0 and filter_language != 0:
+            posts = Posts.objects.filter(language_id=filter_language)
+        elif filter_author != 0 and filter_language == 0:
+            posts = Posts.objects.filter(author_id=filter_author)
+
+    form = SearchForm()
+    if request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            posts = Posts.objects.annotate(search=SearchVector('title', 'author__username', 'language__name')).filter(
+                search=query)
+    return render(request, 'blog/content.html', context={'posts': posts, 'form': form,
+                                                         'domain': current_site.domain, 'languages': languages,
+                                                         'index': index, 'kurs': kurs, 'authors': authors,
+                                                         'form_filter': form_filter})
 
 
-def lang(request, language):
-    post = Posts.objects.filter(language=language)
-    languages = ', '.join([language.name for language in post.language.all()])
-    return render(request, 'blog/language.html', context={'post': post, 'languages': languages})
+def lang(request, language_id):
+    index = IndexInfo.objects.all()[0]
+    languages = Language.objects.all()
+    posts = Posts.objects.filter(language_id=language_id)
+    return render(request, 'blog/language.html', context={'posts': posts, 'index': index, 'languages': languages})
 
 
 def text(request, id):
+    index = IndexInfo.objects.all()[0]
+    languages = Language.objects.all()
     current_site = Site.objects.get_current()
-    posts = Posts.objects.get(pk=id)
-    return render(request, 'blog/text.html', context={'posts': posts, 'domain': current_site.domain})
+    post = Posts.objects.get(pk=id)
+    return render(request, 'blog/text.html', context={'post': post, 'domain': current_site.domain, 'index': index,
+                                                      'languages': languages})
 
 
-def items_aut(request, author):
-    post = Posts.objects.filter(author=author)
-    return render(request, 'blog/items_aut.html', context={'post': post})
+def update_post(request, post_id):
+    index = IndexInfo.objects.all()[0]
+    languages = Language.objects.all()
+    post = Posts.objects.get(id=post_id)
+    if request.method == "POST":
+        form = UpdatePostsForm(instance=post, files=request.FILES or None, data=request.POST or None)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:text', id=post_id)
+    form = UpdatePostsForm(instance=post)
+    return render(request, 'blog/update.html', context={'index': index, 'languages': languages, 'form': form})
 
 
-@login_required(login_url='admin')
+def items_aut(request, author_id):
+    index = IndexInfo.objects.all()[0]
+    languages = Language.objects.all()
+    posts = Posts.objects.filter(author_id=request.user.id)
+    return render(request, 'blog/items_aut.html', context={'posts': posts, 'index': index, 'languages': languages})
+
+
+@login_required(login_url='users/login')
 def add_lang(request: WSGIRequest):
+    index = IndexInfo.objects.all()[0]
+    languages = Language.objects.all()
     if request.method == 'POST':
         form = LanguageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -52,36 +110,126 @@ def add_lang(request: WSGIRequest):
             new_lang.save()
             return redirect('blog:home')
     form = LanguageForm()
-    return render(request, 'blog/add_lang.html', context={'form': form})
+    return render(request, 'blog/add_lang.html', context={'form': form, 'index': index, 'languages': languages})
 
 
 @login_required(login_url='users:login')
-# def add_post(request):
-#     if request.method == 'POST':
-#         form = PostsForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             print('start')
-#             new_post = form.save()
-#             new_post.author = request.user
-#             new_post.save()
-#             print(new_post.author)
-#             print('save')
-#             return redirect('blog:home')
-#     else:
-#         form = PostsForm()
-#     return render(request, 'blog/add_posts.html', context={'form': form})
-
 def add_post(request):
     comment_form = PostsForm
+    index = IndexInfo.objects.all()[0]
+    languages = Language.objects.all()
     if request.method == "POST":
         comment_form = PostsForm(request.POST, request.FILES)
         if comment_form.is_valid():
-            print('start')
             inst = comment_form.save(commit=False)
             inst.author = request.user
             inst.save()
             return redirect('blog:home')
     context = {
-        'form': comment_form,
+        'form': comment_form, 'index': index, 'languages': languages
     }
     return render(request, 'blog/add_posts.html', context)
+
+
+class GetListAllPost(generics.ListAPIView):
+    serializer_class = PostsSerializer
+    pagination_class = PostsPagination
+
+    def get_queryset(self):
+        return Posts.objects.filter(visible=True)
+
+
+class GetListAllLanguages(generics.ListAPIView):
+    serializer_class = LanguagesSerializer
+
+    def get_queryset(self):
+        return Language.objects.all()
+
+
+class GetListPostToUser(generics.ListAPIView):
+    serializer_class = PostsSerializer
+
+    def get_queryset(self):
+        id_user = self.kwargs['id']
+        language_user = self.kwargs['language']
+        return Posts.objects.filter(author_id=id_user, language=get_object_or_404(Language, name=language_user),
+                                    visible=True)
+
+
+class ItemsPost(APIView):
+    def get_object(self, id):
+        try:
+            return Posts.objects.get(id=id)
+        except:
+            raise Http404
+
+    def get(self, request, id, *args, **kwargs):
+        object = self.get_object(id)
+        serializer = PostsSerializer(object)
+        return Response(serializer.data)
+
+
+class CreatePost(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = PostCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            count_post = Posts.objects.filter(content=request.data.get('content'), title=request.data.get('title')).count()
+            if count_post == 0:
+                serializer.save(visible=False, author_id=request.user.id)
+                return Response(serializer.data)
+            else:
+                return Response('content not unique, title not unique')
+        return Response(serializer.errors)
+
+
+class UpdatePost(APIView):
+    def get_object(self, id):
+        try:
+            return Posts.objects.get(id=id)
+        except:
+            raise Http404
+
+    def patch(self, request, id):
+        item = self.get_object(id)
+        if str(item.author) == str(request.user) or request.user.is_superuser:
+            serializer = PostCreateSerializer(item, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save(visible=False)
+                return Response(serializer.data)
+            return Response(serializer.errors)
+        else:
+            return Response({'message': 'No permission delete post!'})
+
+
+class DeletePost(APIView):
+    def get_object(self, id):
+        try:
+            return Posts.objects.get(id=id)
+        except:
+            raise Http404
+
+    def delete(self, request, id, *args, **kwargs):
+        item = self.get_object(id)
+        if str(item.author) == str(request.user):
+            item.delete()
+            return Response({"message": 'Delete!'})
+        else:
+            return Response({"message": 'No permission delete post'})
+
+
+class GetListPostUserToToken(generics.ListAPIView):
+    serializer_class = PostsSerializer
+
+    def get_queryset(self):
+        return Posts.objects.filter(author_id=self.request.user.id)
+
+
+class GetPrivatBank(APIView):
+    def get(self, request, *args, **kwargs):
+        kurs = requests.get('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')
+        result = kurs.json()
+        object_kurs = Kurs.objects.all().order_by('-id')[0]
+        if object_kurs.sale != float(result[0].get('sale')) or object_kurs.buy != float(result[0].get('buy')):
+            new_kurs = Kurs(name=result[0].get('base_ccy'), buy=result[0].get('buy'), sale=result[0].get('sale'))
+            new_kurs.save()
+        return Response(result)

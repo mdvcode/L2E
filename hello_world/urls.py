@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
     path('users/', include('users.urls')),
+    url(r'^auth/', include('djoser.urls')),
+    url(r'^auth-token/', include('djoser.urls.authtoken')),
     # *staticfiles_urlpatterns(),
     # *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
