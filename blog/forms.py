@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 
 from . import models
@@ -28,8 +29,12 @@ class UpdatePostsForm(forms.ModelForm):
 
 
 class FilterPostForm(forms.Form):
-    language_id = ArrayField(forms.CharField())
-    author_id = ArrayField(forms.CharField())
+    language = forms.ModelMultipleChoiceField(
+        queryset=Language.objects.all()
+    )
+    author = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all()
+    )
 
 
 

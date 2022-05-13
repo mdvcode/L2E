@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
+{% include 'material/includes/material_css.html' %}
+{% include 'material/includes/material_js.html' %}
+import material design
+import 'bootstrap/dist/js/bootstrap.bundle'
 {% load widget_tweaks %}
 {% block content %}
 <div id="skySlider" class="carousel slide" data-ride="carousel">
@@ -32,10 +36,48 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
     integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="css/style.css">
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+<div>
+<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-7 text-center mb-5">
+					<h2 class="heading-section">Filter</h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-lg-4 d-flex justify-content-center align-items-center">
+                    {% csrf_token %}
+                    <label>
+                        <select multiple data-placeholder="Language">
+<!--{{ form_filter.language}}-->
+<!-- <option selected>Framer X</option> -->
+				    <option>{{ form_filter.language}}</option>
+<!--				    <option>HTML</option>-->
+<!--				    <option>Wordpress</option>-->
+<!--				    <option>PHP</option>-->
+                        </select>
+                    </label>
+                </div>
+			</div>
+		</div>
+	</section>
+
+<!--    <link href="/Users/user/hello-world/js/jquery.min.js" rel="stylesheet"/>-->
+<!--    <link href="/Users/user/hello-world/js/popper.js" rel="stylesheet"/>-->
+<!--    <link href="/Users/user/hello-world/js/bootstrap.min.js" rel="stylesheet"/>-->
+</div>
 
 </div>
 <div class="col-md-12">
@@ -45,30 +87,28 @@
 		<div class="container">
             <div class="row">
                 <div class="col-md-7">
-    <form action="" method="post">
+    <form class="select2-selection--multiple" method="post">
                     {% csrf_token %}
+<!--{{form_filter}}-->
+
                     <div class="row">
-                        <div class="col-md-4">
-                            <select name="author_id" class="form-control col-md-12" aria-label="Default select example" multiple>
-                                <option value="0" selected>Author</option>
-                                {% for author in authors %}
-                                    <option value="{{author.id}}">{{author.username}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <select name="language_id" class="form-control" aria-label="Default select example">
-                                <option value="0" selected>Languages</option>
-                                {% for language in languages %}
-                                    <option value="{{language.id}}">{{language.name}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-1">
+                            <div class="col-md-5">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" checked="" class="custom-control-input">
+                                    {{ form_filter.author|add_class:"custom-control-label" }}
+                                </label>
+                                </div>
+
+                        <div class="col-md-5">
+                                    {{ form_filter.language|add_class:"form-control" }}
+                            </div>
+                        <div class="col-md-2">
                             <button type="submit" class="btn btn-outline-primary">Filter</button>
                         </div>
-                    </div>
-                </form>
+
+</div>
+    </form>
+
 </div>
             <div class="col-md-4">
                 <form action="" method="get">
@@ -141,6 +181,5 @@
 
 
 
-
-{% endblock %}
+    {% endblock %}
 

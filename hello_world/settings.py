@@ -50,14 +50,23 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'users',
+    'w3',
     'widget_tweaks',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
-
+    'material',
+    'web3auth.apps.Web3AuthConfig',
 
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'web3auth.backend.Web3Backend'
+]
+
+WEB3AUTH_USER_ADDRESS_FIELD = 'username'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

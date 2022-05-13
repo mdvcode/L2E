@@ -93,6 +93,7 @@
 								<li class="active"><a href="{% url 'blog:home' %}">Home</a></li>
 								{% if user.is_authenticated %}
 								<li><a href="{% url 'blog:items_aut' author_id=user.id %}">My Posts</a></li>
+								<li><a href="{% url 'w3:connect' %}">Connect wallet</a></li>
 								<li><a href="{% url 'blog:add_post' %}">Create Post</a></li>
 								<li><a href="{% url 'blog:add_lang' %}">Create Language</a></li>
 								<li><a href="{% url 'users:logout' %}">Logout</a></li>
@@ -122,6 +123,7 @@
 				<li class="active"><a href="{% url 'blog:home' %}">Home</a></li>
 								{% if user.is_authenticated %}
 								<li><a href="{% url 'blog:items_aut' author_id=user.id %}">My Posts</a></li>
+								<li><a href="{% url 'w3:connect' %}">Connect Wallet</a></li>
 								<li><a href="{% url 'blog:add_post' %}">Create Post</a></li>
 								<li><a href="{% url 'blog:add_lang' %}">Create Language</a></li>
 								<li><a href="{% url 'users:logout' %}">Logout</a></li>

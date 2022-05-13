@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from web3 import Web3, HTTPProvider
 
 from .models import Posts, Language, IndexInfo, Kurs
 from .forms import PostsForm, LanguageForm, SearchForm, UpdatePostsForm, FilterPostForm
@@ -26,6 +27,7 @@ def home(request):
     paginator = Paginator(posts, 10)
     page_num = request.GET.get('page')
     kurs = Kurs.objects.all().order_by('-id')[0]
+    w3 = Web3(HTTPProvider())
     try:
         posts = paginator.page(page_num)
     except PageNotAnInteger:
@@ -33,22 +35,28 @@ def home(request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
     languages = Language.objects.all()
-    form_filter = FilterPostForm()
+    form_filter = FilterPostForm
     if request.POST:
         form_filter = FilterPostForm(request.POST)
-        filter_language = int(form_filter.data.get('language_id'))
-        filter_author = form_filter.data.get('author_id')
-        author = request.POST['author_id']
-        print(author)
-        print(filter_author)
-        print(form_filter.data)
-        print(request.POST)
-        if filter_language != 0 and filter_author != 0:
-            posts = Posts.objects.filter(language_id=filter_language, author_id=filter_author)
-        elif filter_author == 0 and filter_language != 0:
-            posts = Posts.objects.filter(language_id=filter_language)
-        elif filter_author != 0 and filter_language == 0:
-            posts = Posts.objects.filter(author_id=filter_author)
+        print('hello')
+        if form_filter.is_valid():
+            language = form_filter.cleaned_data.get('language')
+            language_id = []
+            author = form_filter.cleaned_data.get('author')
+            author_id = []
+            for item in author:
+                author_id.append(item.id)
+            for item in language:
+                language_id.append(item.id)
+            if len(language_id) > 0 and len(author_id) == 0:
+                posts = Posts.objects.filter(language_id__in=language_id)
+            if len(author_id) > 0 and len(language_id) == 0:
+                posts = Posts.objects.filter(author_id__in=author_id)
+
+            if len(author_id) > 0 and len(language_id) > 0:
+                posts = Posts.objects.filter(author_id__in=author_id, language_id__in=language_id)
+        else:
+            form_filter = FilterPostForm
 
     form = SearchForm()
     if request.GET:
@@ -60,7 +68,7 @@ def home(request):
     return render(request, 'blog/content.html', context={'posts': posts, 'form': form,
                                                          'domain': current_site.domain, 'languages': languages,
                                                          'index': index, 'kurs': kurs, 'authors': authors,
-                                                         'form_filter': form_filter})
+                                                         'form_filter': form_filter, 'w3': w3})
 
 
 def lang(request, language_id):

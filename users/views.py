@@ -1,32 +1,18 @@
 import random
-
-from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
+from django.contrib.auth import logout as auth_logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect
-from django.template import RequestContext
-from django.template.response import TemplateResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404
+from django.shortcuts import redirect
+from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from blog.models import IndexInfo, Language
 from users.forms import RegisterForm, UpdateForm
-
-# def signup(request):
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('users:login')
-#     else:
-#         form = RegisterForm()
-#     return render(request, 'users/signup.html', context={'form': form})
 from users.models import Profile
 from users.serializer import ProfileSerializer, AuthorSerializer
 
