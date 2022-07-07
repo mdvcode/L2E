@@ -35,7 +35,7 @@ import material design
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
     integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-<div class="container">
+<div style="margin-left: 10px">
     <div class="row">
         <div class="col-md-12">
             <h4>Connect wallet</h4>
@@ -70,8 +70,10 @@ import material design
                   <th scope="col">Balance</th>
                   <th scope="col">Count transaction</th>
                   <th scope="col">Active</th>
+                  <th scope="col">IPFS transaction</th>
                   <th scope="col">Create transaction</th>
                   <th scope="col">Create text transaction</th>
+                  <th scope="col">Send message</th>
                   <th scope="col">Redaction</th>
                 </tr>
               </thead>
@@ -84,8 +86,10 @@ import material design
                   <td>{{connection.balance}}</td>
                   <td>{{connection.count_trans}}</td>
                   <td>{{connection.active}}</td>
+                    <td><a href="/w3/ipfs/"><button type="submit" class="btn btn-outline-primary">IPFS transaction</button></a></td>
                   <td><a href="/w3/create_trans/{{connection.id}}/"><button type="submit" class="btn btn-outline-primary">Create transaction</button></a></td>
                   <td><a href="/w3/create_text_trans/{{connection.id}}/"><button type="submit" class="btn btn-outline-primary">Create text transaction</button></a></td>
+                  <td><a href="/message/create_message/"><button type="submit" class="btn btn-outline-primary">Send</button></a></td>
                   <td><a href="/w3/redaction/{{connection.id}}/"><button type="submit" class="btn btn-outline-primary">Redaction</button></a></td>
                 </tr>
               {%endfor%}

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'blog',
     'users',
     'w3',
+    'message',
     'widget_tweaks',
     'rest_framework',
     'rest_framework.authtoken',
@@ -175,3 +176,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "mard9378@gmail.com"
 EMAIL_HOST_PASSWORD = "aerfr344gfdsdsds"
+
+

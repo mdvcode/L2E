@@ -38,7 +38,7 @@ def home(request):
     form_filter = FilterPostForm
     if request.POST:
         form_filter = FilterPostForm(request.POST)
-        print('hello')
+        print(request.POST)
         if form_filter.is_valid():
             language = form_filter.cleaned_data.get('language')
             language_id = []

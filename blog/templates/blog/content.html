@@ -5,6 +5,7 @@ import material design
 import 'bootstrap/dist/js/bootstrap.bundle'
 {% load widget_tweaks %}
 {% block content %}
+
 <div id="skySlider" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#skySlider" data-slide-to="0" class="active"></li>
@@ -46,62 +47,40 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<div>
-<section class="ftco-section">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-7 text-center mb-5">
-					<h2 class="heading-section">Filter</h2>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-lg-4 d-flex justify-content-center align-items-center">
-                    {% csrf_token %}
-                    <label>
-                        <select multiple data-placeholder="Language">
-<!--{{ form_filter.language}}-->
-<!-- <option selected>Framer X</option> -->
-				    <option>{{ form_filter.language}}</option>
-<!--				    <option>HTML</option>-->
-<!--				    <option>Wordpress</option>-->
-<!--				    <option>PHP</option>-->
-                        </select>
-                    </label>
-                </div>
-			</div>
-		</div>
-	</section>
-
-<!--    <link href="/Users/user/hello-world/js/jquery.min.js" rel="stylesheet"/>-->
-<!--    <link href="/Users/user/hello-world/js/popper.js" rel="stylesheet"/>-->
-<!--    <link href="/Users/user/hello-world/js/bootstrap.min.js" rel="stylesheet"/>-->
-</div>
-
-</div>
 <div class="col-md-12">
 
         <div class="courses">
 		<div class="courses_background"></div>
 		<div class="container">
+			<br>
+			<div class="row">
+				<div class="col">
+					<h2 style="color: #08055d" class="section_title text-center">Filter</h2>
+				</div>
+			</div>
             <div class="row">
                 <div class="col-md-7">
-    <form class="select2-selection--multiple" method="post">
-                    {% csrf_token %}
-<!--{{form_filter}}-->
+                    <form class="select2-selection--multiple" method="post">
+                        {% csrf_token %}
+
 
                     <div class="row">
                             <div class="col-md-5">
-                                <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" checked="" class="custom-control-input">
-                                    {{ form_filter.author|add_class:"custom-control-label" }}
-                                </label>
-                                </div>
-
-                        <div class="col-md-5">
-                                    {{ form_filter.language|add_class:"form-control" }}
+                                <select name="author" class="selectpicker" multiple data-live-search="true">
+                                    {% for author in authors %}
+                                        <option value="{{author.id}}">{{author.username}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
+
+                            <div class="col-md-5">
+                                <select name="language" class="selectpicker" multiple data-live-search="true">
+                                    {% for language in languages %}
+                                        <option value="{{language.id}}">{{language.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        
                         <div class="col-md-2">
                             <button type="submit" class="btn btn-outline-primary">Filter</button>
                         </div>
@@ -139,7 +118,9 @@ import 'bootstrap/dist/js/bootstrap.bundle'
                 {% for post in posts %}
 				<div class="col-lg-4 course_col">
 					<div class="course">
+                        {% if post.image %}
 						<div class="course_image"><img src="{{ domain }}/media/{{ post.image }}/" alt=""></div>
+                        {% endif %}
 						<div class="course_body">
 							<div class="course_title"><a style='color: #0a0779' href="{% url 'blog:text' id=post.id %}">{{ post.title }}</a></div>
 							<div class="course_info">
@@ -179,7 +160,9 @@ import 'bootstrap/dist/js/bootstrap.bundle'
   </span>
 </div>
 
-
+    </div>
 
     {% endblock %}
+
+
 
