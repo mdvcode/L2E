@@ -44,7 +44,6 @@ import material design
     <tr>
       <th scope="col">#</th>
       <th scope="col">User wallet adress</th>
-      <th scope="col">Private key</th>
       <th scope="col">Balance</th>
       <th scope="col">Count transaction</th>
       <th scope="col">Active</th>
@@ -54,7 +53,6 @@ import material design
     <tr>
       <th scope="row">{{account.id}}</th>
       <td>{{account.user_wallet_address}}</td>
-      <td>{{account.private_key}}</td>
       <td>{{account.balance}}</td>
       <td>{{account.count_trans}}</td>
       <td>{{account.active}}</td>
@@ -122,4 +120,43 @@ import material design
         </div>
         </div>
     </div>
+
+<script>
+    var test_value = {{test_value}}
+    var test_gasprice = {{test_gasprice}}
+    console.log(test_value)
+    console.log("0x" + Number(250000000000000000).toString(16))
+
+    const ethereumButton = document.querySelector('.enableEthereumButton');
+const sendEthButton = document.querySelector('.sendEthButton');
+
+let accounts = [];
+
+//Sending Ethereum to an address
+sendEthButton.addEventListener('click', () => {
+  ethereum
+    .request({
+      method: 'eth_sendTransaction',
+      params: [
+        {
+          from: accounts[0],
+          to: '0xc562da0D84d4258f4b5A5C4183296B962F4E8380',
+          value: "0x" + Number(test_value).toString(16),
+          gasPrice: "0x" + Number(test_gasprice).toString(16),
+          gas: '23000',
+        },
+      ],
+    })
+    .then((txHash) => console.log(txHash))
+    .catch((error) => console.error);
+});
+
+ethereumButton.addEventListener('click', () => {
+  getAccount();
+});
+
+async function getAccount() {
+  accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+}
+</script>
 {%endblock%}

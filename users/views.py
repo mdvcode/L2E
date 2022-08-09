@@ -79,19 +79,6 @@ class GetListAllAuthor(generics.ListAPIView):
         return User.objects.all()
 
 
-class ItemsAuthor(APIView):
-    def get_object(self, id):
-        try:
-            return User.objects.get(id=id)
-        except:
-            raise Http404
-
-    def get(self, request, id, *args, **kwargs):
-        object = self.get_object(id)
-        serializer = AuthorSerializer(object)
-        return Response(serializer.data)
-
-
 class UpdateProfile(APIView):
     def get_object(self, id):
         try:
@@ -154,9 +141,6 @@ class SendRecetPin(APIView):
             if email != None:
                 pin = ''.join([str(random.randint(0, 10)) for _ in range(4)])
                 Profile.objects.filter(email=email).update(pin=pin)
-                # profile = Profile.objects.filter(email=email)[0]
-                # profile.pin = ''.join([str(random.randint(0, 10)) for _ in range(4)])
-                # profile.save(
                 send_mail(
                     'recet password',
                     'you recet pin:' + str(pin),

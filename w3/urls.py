@@ -9,7 +9,8 @@ urlpatterns = [
     path('create_text_trans/<int:id_acc>/', views.create_text_trans, name='create_text_trans'),
     path('ipfs/', views.ipfs, name='ipfs'),
     path('item_ipfs/<int:id_ipfs>/', views.item_ipfs, name='item_ipfs'),
-    path('redaction/<int:id>/', views.redaction, name='redaction'),
     path('result_ipfs_hash/', views.result_ipfs_hash, name='result_ipfs_hash'),
+    path('update_trans/<int:id_transaction>/', views.update_trans, name='update_trans'),
+    path('update_texttrans/<int:id_transaction>/', views.update_texttrans, name='update_texttrans'),
 
 ]

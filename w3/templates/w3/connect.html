@@ -42,6 +42,7 @@ import material design
                 <button id='loginButton' onclick="" class="mx-auto rounded-md p-2 bg-purple-500 text-white">
                       Login with MetaMask
                 </button>
+
                 <p id='userWallet' class='text-lg text-gray-600 my-2'></p>
                 <form class="select2-selection--multiple" method="POST">
                     {% csrf_token %}
@@ -49,10 +50,6 @@ import material design
                     <div class="col-md-5">
                         <label style="padding: 0; margin: 0">User wallet address</label>
                     <input class="form_input" id="user_wallet_address" type="text" name="user_wallet_address">
-                        </div>
-                    <div class="col-md-5">
-                        <label style="padding: 0; margin: 0">Private key</label>
-                    <input class="form_input" id="private_key" type="text" name="private_key">
                         </div>
                     <div class="col-md-2">
                     <button style="margin-top: 17px" type="submit" class="btn btn-outline-primary">Key connection</button>
@@ -66,7 +63,6 @@ import material design
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">User wallet adress</th>
-                  <th scope="col">Private key</th>
                   <th scope="col">Balance</th>
                   <th scope="col">Count transaction</th>
                   <th scope="col">Active</th>
@@ -82,7 +78,6 @@ import material design
                 <tr>
                   <th scope="row">{{connection.id}}</th>
                   <td>{{connection.user_wallet_address}}</td>
-                  <td>{{connection.private_key}}</td>
                   <td>{{connection.balance}}</td>
                   <td>{{connection.count_trans}}</td>
                   <td>{{connection.active}}</td>

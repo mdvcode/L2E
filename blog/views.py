@@ -97,7 +97,7 @@ def update_post(request, post_id):
             form.save()
             return redirect('blog:text', id=post_id)
     form = UpdatePostsForm(instance=post)
-    return render(request, 'blog/update.html', context={'index': index, 'languages': languages, 'form': form})
+    return render(request, 'blog/update_trans.html', context={'index': index, 'languages': languages, 'form': form})
 
 
 def items_aut(request, author_id):
