@@ -204,7 +204,7 @@ def update_texttrans(request, id_transaction):
             form.save()
             return redirect('w3:update_texttrans', id_transaction=id_transaction)
     form = UpdateTextTransactionForm(instance=transactions)
-    w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
+    w3 = Web3(HTTPProvider("https://mainnet.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
     gasprice = w3.toWei(transactions.gas_price, 'gwei')
     s = transactions.data.encode('utf-8')
     data = str(s.hex())
