@@ -43,4 +43,10 @@ class UpdateTextTransactionForm(forms.ModelForm):
         fields = ('to_account', 'gas', 'data', 'gas_price',)
 
 
+class UpdateIPFSTransaction(forms.ModelForm):
+    class Meta:
+        model = IPFS
+        fields = '__all__'
+
+
 

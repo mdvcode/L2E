@@ -7,7 +7,7 @@ from web3 import Web3, HTTPProvider
 
 from blog.models import IndexInfo, Language
 from w3.forms import ConnectWallet, CreateTransForm, CreateTextTransForm, IPFSTransForm, ResultHashForm, \
-    UpdateTransForm, UpdateTextTransactionForm
+    UpdateTransForm, UpdateTextTransactionForm, UpdateIPFSTransaction
 from w3.models import AccountMetamask, Transaction, IPFS
 
 
@@ -144,18 +144,19 @@ def item_ipfs(request, id_ipfs):
                                                gas=form.data.get('gas'), gas_price=form.data.get('gas_price'),
                                                text=data_url, hash_ipfs=response.json().get('Hash'))
         ipfs = IPFS.objects.get(id=id_ipfs)
-        w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
-        construct_txn = {
-            'from': w3.toChecksumAddress(ipfs.account.user_wallet_address),
-            'nonce': w3.eth.getTransactionCount(w3.toChecksumAddress(ipfs.account.user_wallet_address)),
-            'to': w3.toChecksumAddress(ipfs.to_account),
-            'gas': ipfs.gas,
-            'data': ipfs.text.encode('utf-8'),
-            'gasPrice': w3.toWei(ipfs.gas_price, 'gwei')}
+        # w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
+        # construct_txn = {
+        #     'from': w3.toChecksumAddress(ipfs.account.user_wallet_address),
+        #     'nonce': w3.eth.getTransactionCount(w3.toChecksumAddress(ipfs.account.user_wallet_address)),
+        #     'to': w3.toChecksumAddress(ipfs.to_account),
+        #     'gas': ipfs.gas,
+        #     'data': ipfs.text.encode('utf-8'),
+        #     'gasPrice': w3.toWei(ipfs.gas_price, 'gwei')}
 
-        signed_tx = w3.eth.account.signTransaction(construct_txn, ipfs.account.private_key)
-        tx_hash = w3.eth.sendRawTransaction(Web3.toHex(signed_tx.rawTransaction))
-        IPFS.objects.filter(id=id_ipfs).update(result_hash=str(tx_hash.hex()))
+        # signed_tx = w3.eth.account.signTransaction(construct_txn, ipfs.account.private_key)
+        # tx_hash = w3.eth.sendRawTransaction(Web3.toHex(signed_tx.rawTransaction))
+        # IPFS.objects.filter(id=id_ipfs).update(result_hash=str(tx_hash.hex()))
+        return redirect('w3:update_ipfstrans', id_transaction=ipfs.id)
     form = IPFSTransForm
     return render(request, 'w3/item_ipfs.html', context={'item': item, 'index': index,
                                                          'languages': languages, 'form': form})
@@ -206,11 +207,23 @@ def update_texttrans(request, id_transaction):
     form = UpdateTextTransactionForm(instance=transactions)
     w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
     gasprice = w3.toWei(transactions.gas_price, 'gwei')
-    s = transactions.data.encode('utf-8')
-    data = str(s.hex())
-    print('start')
-    print(data)
-    print(type(data))
     gas = transactions.gas
-    return render(request, 'w3/update_texttrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
+    return render(request, 'w3/update_texttrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice
+                                                                })
+
+
+def update_ipfstrans(request, id_transaction):
+    item = IPFS.objects.get(id=id_transaction)
+    if request.method == 'POST':
+        form = UpdateIPFSTransaction(instance=item, data=request.POST or None)
+        if form.is_valid():
+            form.save()
+            return redirect('w3:update_ipfstrans', id_transaction=id_transaction)
+    form = UpdateTextTransactionForm(instance=item)
+    w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
+    gasprice = w3.toWei(item.gas_price, 'gwei')
+    s = item.data.encode('utf-8')
+    data = str(s.hex())
+    gas = item.gas
+    return render(request, 'w3/update_ipfstrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
                                                                 'data': data})
