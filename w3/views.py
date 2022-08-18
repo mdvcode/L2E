@@ -3,6 +3,8 @@ import binascii
 import requests
 import web3
 from django.shortcuts import render, redirect
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from web3 import Web3, HTTPProvider
 
 from blog.models import IndexInfo, Language
@@ -208,8 +210,10 @@ def update_texttrans(request, id_transaction):
     w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
     gasprice = w3.toWei(transactions.gas_price, 'gwei')
     gas = transactions.gas
-    return render(request, 'w3/update_texttrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice
-                                                                })
+    s = transactions.data.encode('utf-8')
+    data = str(s.hex())
+    return render(request, 'w3/update_texttrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
+                                                                'data': data})
 
 
 def update_ipfstrans(request, id_transaction):
@@ -222,8 +226,16 @@ def update_ipfstrans(request, id_transaction):
     form = UpdateTextTransactionForm(instance=item)
     w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
     gasprice = w3.toWei(item.gas_price, 'gwei')
-    s = item.data.encode('utf-8')
+    s = item.text.encode('utf-8')
     data = str(s.hex())
     gas = item.gas
     return render(request, 'w3/update_ipfstrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
                                                                 'data': data})
+
+
+class UpdateHashTransaction(APIView):
+    def post(self, request, *args, **kwargs):
+        transaction = Transaction.objects.get(id=request.data.get('id'))
+        transaction.res_hash = request.data.get('res_hash')
+        transaction.save()
+        return Response(transaction.res_hash)

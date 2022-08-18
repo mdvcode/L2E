@@ -13,5 +13,6 @@ urlpatterns = [
     path('update_trans/<int:id_transaction>/', views.update_trans, name='update_trans'),
     path('update_texttrans/<int:id_transaction>/', views.update_texttrans, name='update_texttrans'),
     path('update_ipfstrans/<int:id_transaction>/', views.update_ipfstrans, name='update_ipfstrans'),
+    path('update/hash/transaction/', views.UpdateHashTransaction.as_view()),
 
 ]

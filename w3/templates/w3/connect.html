@@ -119,6 +119,10 @@ window.userWalletAddress = null
       if (!accounts) { return }
 console.log(window.ethereum)
       window.userWalletAddress = accounts[0]
+        console.log(accounts[0])
+        localStorage.setItem('myAccount', accounts[0]);
+      let test = localStorage.getItem('myAccount')
+        console.log(test)
       userWallet.value = window.userWalletAddress
       loginButton.innerText = 'Sign out of MetaMask'
 

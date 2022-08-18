@@ -64,10 +64,7 @@ import material design
         <div class="col-md-6">
             <h4>Send Transaction</h4>
             <hr>
-            <h5>Step 1: Login Metamask</h5>
-            <button class="enableEthereumButton btn">Login</button>
-            <br>
-            <h5>Step 2: Send transaction metamask</h5>
+            <h5>Step 1: Send transaction metamask</h5>
             <button class="sendEthButton btn">Send</button>
         </div>
 </div>
@@ -78,11 +75,8 @@ import material design
     var gasprice = {{gasprice}}
     var toaccount = document.getElementById('to_account').value
     var gas = {{gas}}
-    const ethereumButton = document.querySelector('.enableEthereumButton');
-const sendEthButton = document.querySelector('.sendEthButton');
-
-let accounts = [];
-
+    const sendEthButton = document.querySelector('.sendEthButton');
+    var transaction = {{transaction}}
 //Sending Ethereum to an address
 sendEthButton.addEventListener('click', () => {
   ethereum
@@ -90,7 +84,7 @@ sendEthButton.addEventListener('click', () => {
       method: 'eth_sendTransaction',
       params: [
         {
-          from: accounts[0],
+          from: localStorage.getItem('myAccount'),
           to: toaccount,
           value: "0x" + Number(value).toString(16),
           gasPrice: "0x" + Number(gasprice).toString(16),
@@ -101,17 +95,21 @@ sendEthButton.addEventListener('click', () => {
     .then((txHash) => {
         console.log(txHash);
         console.log('result');
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://127.0.0.1:8000/w3/update/hash/transaction/");
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = () => console.log(xhr.responseText);
+        let data = JSON.stringify({
+          "id": ,
+          "res_hash": txHash,
+        });
+        xhr.send(data);
+
     })
     .catch((error) => console.error);
 });
-
-ethereumButton.addEventListener('click', () => {
-  getAccount();
-});
-
-async function getAccount() {
-  accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-}
 </script>
 
 {%endblock%}
