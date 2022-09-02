@@ -183,6 +183,8 @@ def result_ipfs_hash(request):
 
 
 def update_trans(request, id_transaction):
+    index = IndexInfo.objects.all()[0]
+    languages = Language.objects.all()
     transactions = Transaction.objects.get(id=id_transaction)
     if request.method == 'POST':
         form = UpdateTransForm(instance=transactions, data=request.POST or None)
@@ -196,10 +198,13 @@ def update_trans(request, id_transaction):
     gas = transactions.gas
     return render(request, 'w3/update_trans.html', context={'form': form,
                                                             'transactions': transactions, 'gas': gas, 'value': value,
-                                                            'gasprice': gasprice})
+                                                            'gasprice': gasprice, 'index': index,
+                                                                'languages': languages})
 
 
 def update_texttrans(request, id_transaction):
+    index = IndexInfo.objects.all()[0]
+    languages = Language.objects.all()
     transactions = Transaction.objects.get(id=id_transaction)
     if request.method == 'POST':
         form = UpdateTextTransactionForm(instance=transactions, data=request.POST or None)
@@ -213,10 +218,13 @@ def update_texttrans(request, id_transaction):
     s = transactions.data.encode('utf-8')
     data = str(s.hex())
     return render(request, 'w3/update_texttrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
-                                                                'data': data})
+                                                                'data': data, 'index': index,
+                                                                'languages': languages})
 
 
 def update_ipfstrans(request, id_transaction):
+    index = IndexInfo.objects.all()[0]
+    languages = Language.objects.all()
     item = IPFS.objects.get(id=id_transaction)
     if request.method == 'POST':
         form = UpdateIPFSTransaction(instance=item, data=request.POST or None)
@@ -230,7 +238,7 @@ def update_ipfstrans(request, id_transaction):
     data = str(s.hex())
     gas = item.gas
     return render(request, 'w3/update_ipfstrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
-                                                                'data': data})
+                                                                'data': data, 'index': index, 'languages': languages})
 
 
 class UpdateHashTransaction(APIView):
@@ -238,4 +246,4 @@ class UpdateHashTransaction(APIView):
         transaction = Transaction.objects.get(id=request.data.get('id'))
         transaction.res_hash = request.data.get('res_hash')
         transaction.save()
-        return Response(transaction.res_hash)
+        return Response(transaction.res_hash, transaction)

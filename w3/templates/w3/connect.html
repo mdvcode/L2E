@@ -70,7 +70,6 @@ import material design
                   <th scope="col">Create transaction</th>
                   <th scope="col">Create text transaction</th>
                   <th scope="col">Send message</th>
-                  <th scope="col">Redaction</th>
                 </tr>
               </thead>
               <tbody>
@@ -85,7 +84,6 @@ import material design
                   <td><a href="/w3/create_trans/{{connection.id}}/"><button type="submit" class="btn btn-outline-primary">Create transaction</button></a></td>
                   <td><a href="/w3/create_text_trans/{{connection.id}}/"><button type="submit" class="btn btn-outline-primary">Create text transaction</button></a></td>
                   <td><a href="/message/create_message/"><button type="submit" class="btn btn-outline-primary">Send</button></a></td>
-                  <td><a href="/w3/redaction/{{connection.id}}/"><button type="submit" class="btn btn-outline-primary">Redaction</button></a></td>
                 </tr>
               {%endfor%}
               </tbody>

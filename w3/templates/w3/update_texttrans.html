@@ -64,10 +64,7 @@ import material design
 <div class="col-md-6">
             <h4>Send Transaction</h4>
             <hr>
-            <h5>Step 1: Login Metamask</h5>
-            <button class="enableEthereumButton btn">Login</button>
-            <br>
-            <h5>Step 2: Send transaction metamask</h5>
+            <h5>Step 1: Send transaction metamask</h5>
             <button class="sendEthButton btn">Send</button>
         </div>
 </div>
@@ -79,10 +76,8 @@ import material design
     var gasprice = {{gasprice}}
     var toaccount = document.getElementById('to_account').value
     var gas = {{gas}}
-    const ethereumButton = document.querySelector('.enableEthereumButton');
 const sendEthButton = document.querySelector('.sendEthButton');
 
-let accounts = [];
 
 //Sending Ethereum to an address
 sendEthButton.addEventListener('click', () => {
@@ -91,7 +86,7 @@ sendEthButton.addEventListener('click', () => {
       method: 'eth_sendTransaction',
       params: [
         {
-          from: accounts[0],
+          from: localStorage.getItem('myAccount'),
           to: toaccount,
           data: data,
           gasPrice: "0x" + Number(gasprice).toString(16),

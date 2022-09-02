@@ -42,11 +42,11 @@ import material design
             {% for message in messages %}
             {% if message.show == True %}
             <div style="border: 1px solid silver; margin: 10px; padding: 10px; border-radius: 25px;">
-                <a style="color: silver" href="/message/info_message/{{message.id}}/"><h5><b>To account metamask:</b> {{message.metamask.user_wallet_address}}</h5></a>
+                <a style="color: silver" href="/message/info_message/{{message.id}}/"><h5><b>From account metamask:</b> {{message.metamask.user_wallet_address}}</h5></a>
             </div>
             {% else %}
             <div style="border: 2px solid #170cd7; margin: 10px; padding: 10px; border-radius: 25px;">
-                <a style="color: #170cd7" href="/message/info_message/{{message.id}}/"><h5><b>To account metamask:</b> {{message.metamask.user_wallet_address}}</h5></a>
+                <a style="color: #170cd7" href="/message/info_message/{{message.id}}/"><h5><b>From account metamask:</b> {{message.metamask.user_wallet_address}}</h5></a>
             </div>
             {% endif %}
             {% endfor %}
