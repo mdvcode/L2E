@@ -57,7 +57,7 @@ class IndexInfo(models.Model):
     instagram = models.CharField(max_length=250)
 
 
-class Kurs(models.Model):
+class Bitcoin(models.Model):
     objects = None
     name = models.CharField(max_length=250)
     buy = models.FloatField(default=0)

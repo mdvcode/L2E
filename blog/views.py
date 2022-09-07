@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from web3 import Web3, HTTPProvider
 
-from .models import Posts, Language, IndexInfo, Kurs
+from .models import Posts, Language, IndexInfo, Bitcoin
 from .forms import PostsForm, LanguageForm, SearchForm, UpdatePostsForm, FilterPostForm
 from .pagination import PostsPagination
 from .serializers import PostsSerializer, LanguagesSerializer, PostCreateSerializer
@@ -26,7 +26,7 @@ def home(request):
     posts = Posts.objects.all()
     paginator = Paginator(posts, 10)
     page_num = request.GET.get('page')
-    kurs = Kurs.objects.all().order_by('-id')[0]
+    bit = Bitcoin.objects.all()
     w3 = Web3(HTTPProvider())
     try:
         posts = paginator.page(page_num)
@@ -38,7 +38,6 @@ def home(request):
     form_filter = FilterPostForm
     if request.POST:
         form_filter = FilterPostForm(request.POST)
-        print(request.POST)
         if form_filter.is_valid():
             language = form_filter.cleaned_data.get('language')
             language_id = []
@@ -67,8 +66,8 @@ def home(request):
                 search=query)
     return render(request, 'blog/content.html', context={'posts': posts, 'form': form,
                                                          'domain': current_site.domain, 'languages': languages,
-                                                         'index': index, 'kurs': kurs, 'authors': authors,
-                                                         'form_filter': form_filter, 'w3': w3})
+                                                         'index': index, 'authors': authors,
+                                                         'form_filter': form_filter, 'w3': w3, 'bit': bit})
 
 
 def lang(request, language_id):
@@ -234,10 +233,10 @@ class GetListPostUserToToken(generics.ListAPIView):
 
 class GetPrivatBank(APIView):
     def get(self, request, *args, **kwargs):
-        kurs = requests.get('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')
-        result = kurs.json()
-        object_kurs = Kurs.objects.all().order_by('-id')[0]
-        if object_kurs.sale != float(result[0].get('sale')) or object_kurs.buy != float(result[0].get('buy')):
-            new_kurs = Kurs(name=result[0].get('base_ccy'), buy=result[0].get('buy'), sale=result[0].get('sale'))
-            new_kurs.save()
+        bit = requests.get('https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5')
+        result = bit.json()
+        object_bit = Bitcoin.objects.all().order_by('-id')[0]
+        if object_bit.sale != float(result[0].get('sale')) or object_bit.buy != float(result[0].get('buy')):
+            new_bit = Bitcoin(name=result[0].get('base_ccy'), buy=result[0].get('buy'), sale=result[0].get('sale'))
+            new_bit.save()
         return Response(result)
