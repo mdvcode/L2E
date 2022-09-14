@@ -196,10 +196,9 @@ def update_trans(request, id_transaction):
     value = w3.toWei(transactions.value, 'ether')
     gasprice = w3.toWei(transactions.gas_price, 'gwei')
     gas = transactions.gas
-    return render(request, 'w3/update_trans.html', context={'form': form,
-                                                            'transactions': transactions, 'gas': gas, 'value': value,
-                                                            'gasprice': gasprice, 'index': index,
-                                                                'languages': languages})
+    return render(request, 'w3/update_trans.html', context={'form': form, 'transactions': transactions, 'gas': gas,
+                                                            'value': value, 'gasprice': gasprice, 'index': index,
+                                                            'languages': languages, 'id_transaction': id_transaction})
 
 
 def update_texttrans(request, id_transaction):
@@ -219,7 +218,8 @@ def update_texttrans(request, id_transaction):
     data = str(s.hex())
     return render(request, 'w3/update_texttrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
                                                                 'data': data, 'index': index,
-                                                                'languages': languages})
+                                                                'languages': languages,
+                                                                'id_transaction': id_transaction})
 
 
 def update_ipfstrans(request, id_transaction):
@@ -238,7 +238,8 @@ def update_ipfstrans(request, id_transaction):
     data = str(s.hex())
     gas = item.gas
     return render(request, 'w3/update_ipfstrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
-                                                                'data': data, 'index': index, 'languages': languages})
+                                                                'data': data, 'index': index, 'languages': languages,
+                                                                'id_transaction': id_transaction})
 
 
 class UpdateHashTransaction(APIView):
@@ -247,3 +248,18 @@ class UpdateHashTransaction(APIView):
         transaction.res_hash = request.data.get('res_hash')
         transaction.save()
         return Response(transaction.res_hash, transaction)
+
+
+class UpdateIPFSHashTransaction(APIView):
+    def post(self, request, *args, **kwargs):
+        transaction = IPFS.objects.get(id=request.data.get('id'))
+        transaction.result_hash = request.data.get('result_hash')
+        transaction.save()
+        return Response(transaction.result_hash, transaction)
+
+
+class UpdateTextTransaction(APIView):
+    def post(self, request, *args, **kwargs):
+        transaction = Transaction.objects.get(id=request.data.get('id'))
+        transaction.text = request.data.get('text')
+

@@ -65,7 +65,6 @@ import material design
                   <th scope="col">User wallet adress</th>
                   <th scope="col">Balance</th>
                   <th scope="col">Count transaction</th>
-                  <th scope="col">Active</th>
                   <th scope="col">IPFS transaction</th>
                   <th scope="col">Create transaction</th>
                   <th scope="col">Create text transaction</th>
@@ -79,8 +78,7 @@ import material design
                   <td>{{connection.user_wallet_address}}</td>
                   <td>{{connection.balance}}</td>
                   <td>{{connection.count_trans}}</td>
-                  <td>{{connection.active}}</td>
-                    <td><a href="/w3/ipfs/"><button type="submit" class="btn btn-outline-primary">IPFS transaction</button></a></td>
+                  <td><a href="/w3/ipfs/"><button type="submit" class="btn btn-outline-primary">IPFS transaction</button></a></td>
                   <td><a href="/w3/create_trans/{{connection.id}}/"><button type="submit" class="btn btn-outline-primary">Create transaction</button></a></td>
                   <td><a href="/w3/create_text_trans/{{connection.id}}/"><button type="submit" class="btn btn-outline-primary">Create text transaction</button></a></td>
                   <td><a href="/message/create_message/"><button type="submit" class="btn btn-outline-primary">Send</button></a></td>

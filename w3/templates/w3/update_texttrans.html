@@ -71,6 +71,7 @@ import material design
     </div>
 
 <script>
+    var id_transaction = {{id_transaction}}
     var data = document.getElementById('data').value
     console.log(data)
     var gasprice = {{gasprice}}
@@ -97,6 +98,17 @@ sendEthButton.addEventListener('click', () => {
     .then((txHash) => {
         console.log(txHash);
         console.log('result');
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://127.0.0.1:8000/w3/update/hash/transaction/");
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = () => console.log(xhr.responseText);
+        let data = JSON.stringify({
+          "id": id_transaction,
+          "res_hash": txHash,
+        });
+        xhr.send(data);
     })
     .catch((error) => console.error);
 });

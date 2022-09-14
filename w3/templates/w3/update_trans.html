@@ -71,6 +71,7 @@ import material design
     </div>
 
 <script>
+    var id_transaction = {{id_transaction}}
     var value = {{value}}
     var gasprice = {{gasprice}}
     var toaccount = document.getElementById('to_account').value
@@ -102,7 +103,7 @@ sendEthButton.addEventListener('click', () => {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onload = () => console.log(xhr.responseText);
         let data = JSON.stringify({
-          "id": ,
+          "id": id_transaction,
           "res_hash": txHash,
         });
         xhr.send(data);

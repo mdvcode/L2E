@@ -23,7 +23,6 @@ class Transaction(models.Model):
     gas_price = models.IntegerField(default=0)
     res_hash = models.CharField(max_length=250, null=True, blank=True)
     data = models.CharField(max_length=5000, null=True, blank=True)
-    text = models.CharField(max_length=250, null=True, blank=True)
 
 
 class IPFS(models.Model):
@@ -37,6 +36,7 @@ class IPFS(models.Model):
     gas_price = models.IntegerField(default=0, null=True, blank=True)
     text = models.CharField(max_length=250, null=True, blank=True)
     hash_ipfs = models.CharField(max_length=250, null=True, blank=True)
+
 
 
 

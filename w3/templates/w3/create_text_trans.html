@@ -37,29 +37,6 @@ import material design
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            <h4>Transaction</h4>
-            <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">User wallet adress</th>
-      <th scope="col">Balance</th>
-      <th scope="col">Count transaction</th>
-      <th scope="col">Active</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">{{account.id}}</th>
-      <td>{{account.user_wallet_address}}</td>
-      <td>{{account.balance}}</td>
-      <td>{{account.count_trans}}</td>
-      <td>{{account.active}}</td>
-    </tr>
-  </tbody>
-</table>
-            </div>
 <div class="col-md-12">
             <h4>History transaction:</h4>
             <table class="table">
@@ -67,11 +44,8 @@ import material design
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">To account</th>
-                      <th scope="col">Gas</th>
                       <th scope="col">Data</th>
-                      <th scope="col">gasPrice</th>
                       <th scope="col">Result hash</th>
-                      <th scope="col">Text</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -79,11 +53,8 @@ import material design
                     <tr>
                       <th scope="row">{{transaction.id}}</th>
                       <td>{{transaction.to_account}}</td>
-                      <td>{{transaction.gas}}</td>
                       <td>{{transaction.data}}</td>
-                      <td>{{transaction.gas_price}}</td>
                       <td>{{transaction.res_hash}}</td>
-                      <td>{{transaction.text}}</td>
                     </tr>
                   {% endfor %}
   </tbody>
