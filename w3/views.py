@@ -141,8 +141,7 @@ def item_ipfs(request, id_ipfs):
         response = requests.post('https://ipfs.infura.io:5001/api/v0/add', files=files,
                                  auth=('29QAqPI0HxrbfPWaTYotMnpdyho', 'a1d30f9c414e15aa990a140ac924f33b'))
         data_url = 'https://ipfs.io/ipfs/' + response.json().get('Hash')
-        IPFS.objects.filter(id=id_ipfs).update(account_id=form.data.get('account'),
-                                               to_account=form.data.get('to_account'),
+        IPFS.objects.filter(id=id_ipfs).update(account=form.data.get('account'), to_account=form.data.get('to_account'),
                                                gas=form.data.get('gas'), gas_price=form.data.get('gas_price'),
                                                text=data_url, hash_ipfs=response.json().get('Hash'))
         ipfs = IPFS.objects.get(id=id_ipfs)
@@ -258,8 +257,10 @@ class UpdateIPFSHashTransaction(APIView):
         return Response(transaction.result_hash, transaction)
 
 
-class UpdateTextTransaction(APIView):
+class UpdateAccountIPFS(APIView):
     def post(self, request, *args, **kwargs):
-        transaction = Transaction.objects.get(id=request.data.get('id'))
-        transaction.text = request.data.get('text')
+        account = IPFS.objects.get(id=request.data.get('id'))
+        account.user_wallet_address = request.data.get('account')
+        account.save()
+        return Response(account.user_wallet_address, account)
 
