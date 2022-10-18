@@ -41,18 +41,6 @@ import material design
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row contact_row">
-								<div class="col-lg-12 contact_col">
-                                    <label style="color: #2B333F">To account</label>
-                                    <input id="to_account" class="form_input" type="text" name="to_account" value="{{ form.to_account.value }}">
-								</div>
-    <div class="col-lg-12 contact_col">
-                                    <label style="color: #2B333F">Gas</label>
-                                    <input id="gas" class="form_input" type="text" name="gas" value="{{ form.gas.value }}">
-								</div>
-    <div class="col-lg-12 contact_col">
-                                    <label style="color: #2B333F">GasPrice</label>
-                                    <input id="gas_price" class="form_input" type="text" name="gas_price" value="{{ form.gas_price.value }}">
-								</div>
     <div class="col-lg-12 contact_col">
                                     <label style="color: #2B333F">Data</label>
                                     <h6><u style="color: black" id="data">{{data}}</u></h6>
@@ -73,9 +61,6 @@ import material design
     var id_transaction = {{id_transaction}}
     var data = document.getElementById('data').textContent
     console.log(data)
-    var gasprice = {{gasprice}}
-    var toaccount = document.getElementById('to_account').value
-    var gas = {{gas}}
     const sendEthButton = document.querySelector('.sendEthButton');
 
 
@@ -87,10 +72,9 @@ sendEthButton.addEventListener('click', () => {
       params: [
         {
           from: localStorage.getItem('myAccount'),
-          to: toaccount,
+          to: localStorage.getItem('myAccount'),
           data: data,
-          gasPrice: "0x" + Number(gasprice).toString(16),
-          gas: Number(gas).toString(16),
+
         },
       ],
     })
@@ -114,6 +98,16 @@ sendEthButton.addEventListener('click', () => {
 
 ethereumButton.addEventListener('click', () => {
   getAccount();
+  let xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://127.0.0.1:8000/w3/update/account/ipfs/");
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = () => console.log(xhr.responseText);
+        let data = JSON.stringify({
+          "id": id_transaction,
+          "account": localStorage.getItem('myAccount'),
+        });
+        xhr.send(data);
 });
 
 async function getAccount() {

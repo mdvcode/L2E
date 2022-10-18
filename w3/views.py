@@ -141,8 +141,7 @@ def item_ipfs(request, id_ipfs):
         response = requests.post('https://ipfs.infura.io:5001/api/v0/add', files=files,
                                  auth=('29QAqPI0HxrbfPWaTYotMnpdyho', 'a1d30f9c414e15aa990a140ac924f33b'))
         data_url = 'https://ipfs.io/ipfs/' + response.json().get('Hash')
-        IPFS.objects.filter(id=id_ipfs).update(account=form.data.get('account'), to_account=form.data.get('to_account'),
-                                               gas=form.data.get('gas'), gas_price=form.data.get('gas_price'),
+        IPFS.objects.filter(id=id_ipfs).update(account=form.data.get('account'),
                                                text=data_url, hash_ipfs=response.json().get('Hash'))
         ipfs = IPFS.objects.get(id=id_ipfs)
         # w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
@@ -193,10 +192,8 @@ def update_trans(request, id_transaction):
     form = UpdateTransForm(instance=transactions)
     w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
     value = w3.toWei(transactions.value, 'ether')
-    gasprice = w3.toWei(transactions.gas_price, 'gwei')
-    gas = transactions.gas
-    return render(request, 'w3/update_trans.html', context={'form': form, 'transactions': transactions, 'gas': gas,
-                                                            'value': value, 'gasprice': gasprice, 'index': index,
+    return render(request, 'w3/update_trans.html', context={'form': form, 'transactions': transactions,
+                                                            'value': value, 'index': index,
                                                             'languages': languages, 'id_transaction': id_transaction})
 
 
@@ -210,15 +207,10 @@ def update_texttrans(request, id_transaction):
             form.save()
             return redirect('w3:update_texttrans', id_transaction=id_transaction)
     form = UpdateTextTransactionForm(instance=transactions)
-    w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
-    gasprice = w3.toWei(transactions.gas_price, 'gwei')
-    gas = transactions.gas
     s = transactions.data.encode('utf-8')
     data = str(s.hex())
-    return render(request, 'w3/update_texttrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
-                                                                'data': data, 'index': index,
-                                                                'languages': languages,
-                                                                'id_transaction': id_transaction})
+    return render(request, 'w3/update_texttrans.html', context={'form': form, 'data': data, 'index': index,
+                                                                'languages': languages, 'id_transaction': id_transaction})
 
 
 def update_ipfstrans(request, id_transaction):
@@ -231,12 +223,9 @@ def update_ipfstrans(request, id_transaction):
             form.save()
             return redirect('w3:update_ipfstrans', id_transaction=id_transaction)
     form = UpdateTextTransactionForm(instance=item)
-    w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
-    gasprice = w3.toWei(item.gas_price, 'gwei')
     s = item.text.encode('utf-8')
     data = str(s.hex())
-    gas = item.gas
-    return render(request, 'w3/update_ipfstrans.html', context={'form': form, 'gas': gas, 'gasprice': gasprice,
+    return render(request, 'w3/update_ipfstrans.html', context={'form': form,
                                                                 'data': data, 'index': index, 'languages': languages,
                                                                 'id_transaction': id_transaction})
 
@@ -260,7 +249,7 @@ class UpdateIPFSHashTransaction(APIView):
 class UpdateAccountIPFS(APIView):
     def post(self, request, *args, **kwargs):
         account = IPFS.objects.get(id=request.data.get('id'))
-        account.user_wallet_address = request.data.get('account')
+        account.account = request.data.get('account')
         account.save()
         return Response(account.user_wallet_address, account)
 

@@ -12,13 +12,13 @@ class ConnectWallet(forms.ModelForm):
 class CreateTransForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ('to_account', 'gas', 'value', 'gas_price',)
+        fields = ('value',)
 
 
 class CreateTextTransForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ('to_account', 'gas', 'data', 'gas_price',)
+        fields = ('data',)
 
 
 class IPFSTransForm(forms.ModelForm):
@@ -34,13 +34,13 @@ class ResultHashForm(forms.Form):
 class UpdateTransForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ('to_account', 'gas', 'value', 'gas_price',)
+        fields = ('value',)
 
 
 class UpdateTextTransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ('to_account', 'gas', 'data', 'gas_price',)
+        fields = ('data',)
 
 
 class UpdateIPFSTransaction(forms.ModelForm):

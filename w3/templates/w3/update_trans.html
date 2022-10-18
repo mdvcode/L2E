@@ -41,21 +41,9 @@ import material design
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row contact_row">
-								<div class="col-lg-12 contact_col">
-                                    <label style="color: #2B333F">To account</label>
-                                    <input id="to_account" class="form_input" type="text" name="to_account" value="{{ form.to_account.value }}">
-								</div>
-    <div class="col-lg-12 contact_col">
-                                    <label style="color: #2B333F">Gas</label>
-                                    <input id="gas" class="form_input" type="text" name="gas" value="{{ form.gas.value }}">
-								</div>
     <div class="col-lg-12 contact_col">
                                     <label style="color: #2B333F">Value</label>
                                     <input id="value" class="form_input" type="text" name="value" value="{{ form.value.value }}">
-								</div>
-    <div class="col-lg-12 contact_col">
-                                    <label style="color: #2B333F">GasPrice</label>
-                                    <input id="gas_price" class="form_input" type="text" name="gas_price" value="{{ form.gas_price.value }}">
 								</div>
                     <button type="submit" class="btn btn-outline-primary">Update</button>
 </div>
@@ -73,9 +61,6 @@ import material design
 <script>
     var id_transaction = {{id_transaction}}
     var value = {{value}}
-    var gasprice = {{gasprice}}
-    var toaccount = document.getElementById('to_account').value
-    var gas = {{gas}}
     const sendEthButton = document.querySelector('.sendEthButton');
     var transaction = {{transaction}}
 //Sending Ethereum to an address
@@ -86,10 +71,9 @@ sendEthButton.addEventListener('click', () => {
       params: [
         {
           from: localStorage.getItem('myAccount'),
-          to: toaccount,
+          to: localStorage.getItem('myAccount'),
           value: "0x" + Number(value).toString(16),
-          gasPrice: "0x" + Number(gasprice).toString(16),
-          gas: Number(gas).toString(16),
+
         },
       ],
     })

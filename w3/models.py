@@ -17,10 +17,7 @@ class AccountMetamask(models.Model):
 class Transaction(models.Model):
     objects = None
     account = models.ForeignKey(AccountMetamask, null=True, blank=True, on_delete=models.CASCADE)
-    to_account = models.CharField(max_length=250, null=True, blank=True)
-    gas = models.IntegerField(default=0)
     value = models.FloatField(default=0)
-    gas_price = models.IntegerField(default=0)
     res_hash = models.CharField(max_length=250, null=True, blank=True)
     data = models.CharField(max_length=5000, null=True, blank=True)
 
