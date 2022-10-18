@@ -43,8 +43,6 @@ import material design
                   <thead>
                     <tr>
                       <th scope="col">#</th>
-                      <th scope="col">To account</th>
-                      <th scope="col">Data</th>
                       <th scope="col">Result hash</th>
                     </tr>
                   </thead>
@@ -52,8 +50,6 @@ import material design
                   {% for transaction in transactions %}
                     <tr>
                       <th scope="row">{{transaction.id}}</th>
-                      <td>{{transaction.to_account}}</td>
-                      <td>{{transaction.data}}</td>
                       <td>{{transaction.res_hash}}</td>
                     </tr>
                   {% endfor %}
@@ -65,22 +61,10 @@ import material design
             <form class="select2-selection--multiple" method="post">
                 {% csrf_token %}
                 <div class="row">
-<!--                <div class="col-md-3">-->
-<!--                    <label style="padding: 0; margin: 0">To account</label>-->
-<!--                <input class="form_input" id="to_account" type="text" name="to_account">-->
-<!--                    </div>-->
-<!--                <div class="col-md-3">-->
-<!--                    <label style="padding: 0; margin: 0">Gas</label>-->
-<!--                <input class="form_input" id="gas" type="text" name="gas">-->
-<!--                    </div>-->
                     <div class="col-md-3">
                     <label style="padding: 0; margin: 0">Data</label>
                 <input class="form_input" id="data" type="text" name="data">
                     </div>
-<!--                    <div class="col-md-3">-->
-<!--                    <label style="padding: 0; margin: 0">gasPrice</label>-->
-<!--                <input class="form_input" id="gas_price" type="text" name="gas_price">-->
-<!--                    </div>-->
 
                 <div class="col-md-12">
                 <button style="margin-top: 17px" type="submit" class="btn btn-outline-primary">Create text transaction</button>

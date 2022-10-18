@@ -43,7 +43,7 @@ import material design
                     <div class="row contact_row">
     <div class="col-lg-12 contact_col">
                                     <label style="color: #2B333F">Data</label>
-                                    <h6><u style="color: black" id="data">{{data}}</u></h6>
+                                    <h6><u style="color: black" id="text">{{data}}</u></h6>
 								</div>
                     <button type="submit" class="btn btn-outline-primary">Update</button>
 </div>
@@ -59,7 +59,7 @@ import material design
     </div>
 <script>
     var id_transaction = {{id_transaction}}
-    var data = document.getElementById('data').textContent
+    var data = document.getElementById('text').textContent
     console.log(data)
     const sendEthButton = document.querySelector('.sendEthButton');
 

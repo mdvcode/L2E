@@ -43,7 +43,6 @@ import material design
               <thead>
                 <tr>
                   <th scope="col">Id</th>
-                  <th scope="col">File</th>
                   <th scope="col">Hash</th>
                   <th scope="col">Link</th>
                   <th scope="col">Hash ipfs</th>
@@ -52,7 +51,6 @@ import material design
               <tbody>
                 <tr>
                   <th scope="row">{{item.id}}</th>
-                  <th scope="row">{{item.file}}</th>
                   <th scope="row">{{item.result_hash}}</th>
                   <th scope="row"><li><a style='color: black' href="{{ item.text }}" target="_blank"> link </a></li></th>
                   <th scope="row">{{item.hash_ipfs}}</th>
@@ -61,20 +59,7 @@ import material design
             </table>
             <form method="POST">
                 {% csrf_token %}
-            <div class="row">
-                <div class="col-md-3">
-                    <label style="padding: 0; margin: 0">To account</label>
-                <input class="form_input" id="to_account" type="text" name="to_account">
-                    </div>
-                <div class="col-md-3">
-                    <label style="padding: 0; margin: 0">Gas</label>
-                <input class="form_input" id="gas" type="text" name="gas">
-                    </div>
-                    <div class="col-md-3">
-                    <label style="padding: 0; margin: 0">gasPrice</label>
-                <input class="form_input" id="gas_price" type="text" name="gas_price">
-                    </div>
-                </div>
+
                 <button style="margin-top: 17px" type="submit" class="btn btn-outline-primary">Connection ipfs</button>
             </form>
         </div>

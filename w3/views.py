@@ -1,12 +1,9 @@
 import binascii
-
 import requests
-import web3
 from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from web3 import Web3, HTTPProvider
-
 from blog.models import IndexInfo, Language
 from w3.forms import ConnectWallet, CreateTransForm, CreateTextTransForm, IPFSTransForm, ResultHashForm, \
     UpdateTransForm, UpdateTextTransactionForm, UpdateIPFSTransaction
@@ -49,21 +46,6 @@ def create_trans(request, id_acc):
             inst = form.save(commit=False)
             inst.account = AccountMetamask.objects.get(id=id_acc)
             inst.save()
-            # test_toaccount = w3.toChecksumAddress(inst.to_account)
-
-            # construct_txn = {
-            #     'from': w3.toChecksumAddress(account.user_wallet_address),
-            #     'nonce': w3.eth.getTransactionCount(w3.toChecksumAddress(account.user_wallet_address)),
-            #     'to': w3.toChecksumAddress(inst.to_account),
-            #     'gas': inst.gas,
-            #     'value': w3.toWei(inst.value, 'ether'),
-            #     'gasPrice': w3.toWei(inst.gas_price, 'gwei')}
-
-            # signed_tx = w3.eth.account.signTransaction(construct_txn, inst.account.private_key)
-            #
-            # tx_hash = w3.eth.sendRawTransaction(Web3.toHex(signed_tx.rawTransaction))
-            # Transaction.objects.filter(id=inst.id).update(res_hash=str(tx_hash.hex()))
-
             return redirect('w3:update_trans', id_transaction=inst.id)
         form = CreateTransForm()
     return render(request, 'w3/create_trans.html', context={'account': account, 'transactions': transactions,
@@ -89,22 +71,6 @@ def create_text_trans(request, id_acc):
             inst = form.save(commit=False)
             inst.account = AccountMetamask.objects.get(id=id_acc)
             inst.save()
-            # w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
-
-            # construct_txn = {
-            #     'from': w3.toChecksumAddress(account.user_wallet_address),
-            #     'nonce': w3.eth.getTransactionCount(w3.toChecksumAddress(account.user_wallet_address)),
-            #     'to': w3.toChecksumAddress(inst.to_account),
-            #     'gas': inst.gas,
-            #     'data': inst.data.encode('utf-8'),
-            #     'gasPrice': w3.toWei(inst.gas_price, 'gwei')}
-
-            # signed_tx = w3.eth.account.signTransaction(construct_txn, inst.account.private_key)
-            # tx_hash = w3.eth.sendRawTransaction(Web3.toHex(signed_tx.rawTransaction))
-            # Transaction.objects.filter(id=inst.id).update(res_hash=str(tx_hash.hex()))
-            # transaction = w3.eth.getTransaction(tx_hash)
-            # Transaction.objects.filter(id=inst.id).update(data=transaction.get('input'))
-            # Transaction.objects.filter(id=inst.id).update(text=hex_to_ascii(transaction.get('input')).decode('utf-8'))
             return redirect('w3:update_texttrans', id_transaction=inst.id)
         form = CreateTextTransForm()
 
@@ -144,18 +110,6 @@ def item_ipfs(request, id_ipfs):
         IPFS.objects.filter(id=id_ipfs).update(account=form.data.get('account'),
                                                text=data_url, hash_ipfs=response.json().get('Hash'))
         ipfs = IPFS.objects.get(id=id_ipfs)
-        # w3 = Web3(HTTPProvider("https://ropsten.infura.io/v3/27709d11030e4a8f8a3066732c9e6b90"))
-        # construct_txn = {
-        #     'from': w3.toChecksumAddress(ipfs.account.user_wallet_address),
-        #     'nonce': w3.eth.getTransactionCount(w3.toChecksumAddress(ipfs.account.user_wallet_address)),
-        #     'to': w3.toChecksumAddress(ipfs.to_account),
-        #     'gas': ipfs.gas,
-        #     'data': ipfs.text.encode('utf-8'),
-        #     'gasPrice': w3.toWei(ipfs.gas_price, 'gwei')}
-
-        # signed_tx = w3.eth.account.signTransaction(construct_txn, ipfs.account.private_key)
-        # tx_hash = w3.eth.sendRawTransaction(Web3.toHex(signed_tx.rawTransaction))
-        # IPFS.objects.filter(id=id_ipfs).update(result_hash=str(tx_hash.hex()))
         return redirect('w3:update_ipfstrans', id_transaction=ipfs.id)
     form = IPFSTransForm
     return render(request, 'w3/item_ipfs.html', context={'item': item, 'index': index,
